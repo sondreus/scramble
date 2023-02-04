@@ -12,16 +12,8 @@ if (interactive()) {
     textInput("dictionary", "Dictionary", "Dictionary"),
     verbatimTextOutput("value")
   )
+  
   server <- function(input, output) {
-    
-#    dat <- reactiveValues(trythis = NA)
-    
-    # Generate dummy dictionary
-#    input$dictionary <- data.frame(pinyin = c("A", "A", "A", "B", "B"),
-#                             word = c("frog", "submarine", 
-#                                      "bird", "cake", "bread"))
-#    input$sensitive_words <- c('frog', 'bread')
-#    dat$trythis <- 'LOLOLOL'
     
     source('scramble.R')
     
@@ -34,9 +26,6 @@ if (interactive()) {
     output$value <- renderText({scramble(input$text,
                                          dictionary,
                                          sensitive = from_csv_to_vector(input$sensitive_words))})
-#    output$value <- renderText({ scramble(text = input$input, 
-#                                          dic = dictionary,
-#                                          })
   }
   shinyApp(ui, server)
 }
