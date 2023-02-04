@@ -3,6 +3,7 @@ library(shiny)
 # Only run examples in interactive R sessions
 if (interactive()) {
 
+  Sys.setlocale(category = "LC_ALL", locale = "chs") 
   
   sensitive_words <- c('frog', 'bread')
 
@@ -15,16 +16,15 @@ if (interactive()) {
   
   server <- function(input, output) {
     
-    source('scramble.R')
+    source('scramble.R', encoding="utf-8")
     
-    dictionary <- data.frame(sound = c("A", "A", "A", "B", "B", "A"),
-                      word = c("frog", "submarine", 
-                               "bird", "cake", "bread", "synonym"))
+    library(readr)
+    dictionary <- read_csv('chinese_dic.csv')
     
     from_csv_to_vector <- function(x){gsub(' ', '', unlist(strsplit(x, ',')))}
-
+    
     output$value <- renderText({scramble(input$text,
-                                         dictionary,
+                                         dic = dictionary,
                                          sensitive = from_csv_to_vector(input$sensitive_words))})
   }
   shinyApp(ui, server)
