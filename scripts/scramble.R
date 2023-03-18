@@ -1,7 +1,8 @@
 # This program replaces words with other words, based on a common sound.
 
 scramble <- function(text, dic, 
-                     sensitive = c('frog', 'bread')){
+                     sensitive = c('frog', 'bread'),
+                     min_replacements = 5){
   
   if(length(sensitive) == 0){
     return(text)
@@ -23,8 +24,19 @@ scramble <- function(text, dic,
   # Generate replacement words
   for(i in 1:length(sensitive)){
     replacements[[i]] <- setdiff(dic$word[dic$sound == dic$sound[dic$word == sensitive[i]] & dic$can_replace], sensitive[i])
-    if(length(replacements[[i]]) == 0){
-      stop(paste0('Stopping: "', sensitive[i], '" has no eligible homonyms.'))
+    if(length(replacements[[i]]) < min_replacements){
+      
+      dic$tone <- suppressWarnings(parse_number(dic$sound))
+      dic$sound2 <- gsub('[0-9]+', '', dic$sound)
+      dic <- dic[order(dic$tone), ]
+      
+      extra <- c(replacements[[i]], na.omit(setdiff(dic$word[dic$sound2 == dic$sound2[dic$word == gsub('[0-9]+', '', sensitive[i])] & dic$can_replace], sensitive[i])))
+
+      
+      replacements[[i]] <- c(extra)[1:min(c(length(extra), 5))]
+      if(length(replacements[[i]]) < 5){
+        stop(paste0('Stopping: "', sensitive[i], '" has less than ', min_replacements, ' eligible homonyms.'))
+      }
     }
   }
   
@@ -50,11 +62,10 @@ if(F){
   # Import dictionary (source: https://www.mdbg.net/chinese/dictionary?page=cedict)
   dic <- read_csv('source-data/chinese_dic.csv')
   
-  sensitive_words <- c('是', '生')
+  sensitive_words <- c('是', '生', '我')
   
   # Generate dummy text
-  text <- "I am a 生, and I like blogs. Frog is not the answer. However, I wish it could be, at some point, fRogs, that is. Or birds for that matter. BTW, what about bread"
-  
+  text <- "I am a 生, and I like blogs. Frog is not the answer. However, I wish it could be, at some point, fRogs, that is. Or birds for that matter. BTW, what about bread 我"
   
 scramble(text, dic, sensitive = sensitive_words)
 }
