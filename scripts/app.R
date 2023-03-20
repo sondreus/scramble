@@ -32,10 +32,11 @@ if (interactive()) {
     sidebarPanel(
     "Input",
     textAreaInput("text", "", "My name is frog and I am the best bread"),
-    "Output",
-    "",
+    ""),
     # verbatimTextOutput("value"),
-    textOutput("value")),
+    sidebarPanel("Output:",
+                 "",
+                 textOutput("value")),
     checkboxInput(
       inputId = "themeToggle",
       label = icon("sun")
