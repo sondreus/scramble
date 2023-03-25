@@ -1,5 +1,6 @@
 library(shiny)
 library(shinythemes)
+library(shinyWidgets)
 
 # Only run examples in interactive R sessions
 if (interactive()) {
@@ -10,6 +11,18 @@ if (interactive()) {
 
   ui <- fluidPage(
     theme = shinytheme("darkly"),
+   #  tags$head(tags$style(HTML('
+   # textArea {
+   #   background-color: transparent !important;
+   #   border: none;
+   # }'))),
+   tags$head(
+     tags$style(
+       "body {
+        margin: 20px;
+      }"
+     )
+   ),
     tags$head(
       tags$style(
         "#themeToggle, 
@@ -26,16 +39,22 @@ if (interactive()) {
             }"
       )
     ),
-    sidebarPanel("Censored terms",
-    textAreaInput("sensitive_words", "", "习, 近" #paste(sensitive_words, collapse = ', ')
-              )),
-    sidebarPanel(
-    "Input",
-    textAreaInput("text", "", "My name is frog and I am the best bread"),
-    "Output",
-    "",
-    # verbatimTextOutput("value"),
-    textOutput("value")),
+   fluidRow(column(width = 12, 
+      "Avoid",
+      checkboxInput("github_checkbox", label = HTML(paste0('<a href="https://github.com/username/repo"><i class="fa fa-github"></i>++</a>')), value = T),
+      textAreaInput("sensitive_words", "and also:", "习近平"),
+      "Input",
+      textAreaInput("text", "", "My name is frog and I am the best bread"),
+      "Output",
+    textOutput("value"))),
+   fluidRow(
+     column(width = 12,
+            div(style = "border-bottom: 1px solid gray; margin-top: 20px; margin-bottom: 20px;")
+     )
+   ),
+   fluidRow(
+     column(width = 12,
+                   div(style = "text-align:left; display: inline-block;",
     checkboxInput(
       inputId = "themeToggle",
       label = icon("sun")
@@ -89,21 +108,40 @@ if (interactive()) {
                 head.appendChild(darkTheme);
             }
         })
-        ")
+        "), tags$a(href = "https://github.com/sondreus/scramble",
+                   icon("github"),
+                   " "))
+    ))
   )
   
   server <- function(input, output) {
     
+    # Load scrambler
     source('scramble.R', encoding="utf-8")
     
+    # Load dictionary
     library(readr)
     dictionary <- read_csv('chinese_dic.csv')
     
     from_csv_to_vector <- function(x){gsub(' ', '', unlist(strsplit(x, ',')))}
     
+    add_known <- function(x, checkmark = input$github_checkbox){
+      if(checkmark){
+        c(known_sensitive, from_csv_to_vector(input$sensitive_words))
+      } else {
+        from_csv_to_vector(input$sensitive_words)
+      }
+    }
+    
+    known_sensitive <- unique(na.omit(as.character(unlist(read_csv('sensitive_terms_prc.csv')))))
+
+    # output$value <- renderText({scramble(input$text,
+    #                                      dic = dictionary,
+    #                                      sensitive = ifelse(input$github_checkbox, c(known_sensitive, from_csv_to_vector(input$sensitive_words)), from_csv_to_vector(input$sensitive_words)))})
+    # 
     output$value <- renderText({scramble(input$text,
                                          dic = dictionary,
-                                         sensitive = from_csv_to_vector(input$sensitive_words))})
+                                         sensitive = add_known(input$sensitive_words))})
   }
   shinyApp(ui, server)
 }

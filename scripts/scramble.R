@@ -1,18 +1,25 @@
 # This program replaces words with other words, based on a common sound.
 
 scramble <- function(text, dic, 
-                     sensitive = c('frog', 'bread'),
+                     sensitive,
                      min_replacements = 5){
   
   if(length(sensitive) == 0){
     return(text)
   }
-  
+
   # Build possible replacements (can potentially build in probability vector here if needed)
   replacements <- list()
   
   # Remove words without known sound or sounds without known words
   dic <- na.omit(dic)
+  
+  # Split Chinese character sequences into component characters:
+  chinese_chars <- unlist(strsplit(gsub("[^\\p{Han}]", "", sensitive, perl = T), ""))
+  
+  # And words into component words
+  non_chinese_chars <- unlist(strsplit(gsub("[\\p{Han}]", "", sensitive, perl = T), " "))
+  sensitive <- unique(c(non_chinese_chars, chinese_chars))
   
   if(sum(!sensitive %in% dic$word) != 0){
     stop('Stopping: "', paste0(sensitive[!sensitive %in% dic$word], collapse ='", "'), '" not in dictionary.')
