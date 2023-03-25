@@ -12,4 +12,15 @@ sensitive_chinese_words <- sensitive_chinese_words[sensitive_chinese_words$keywo
 sensitive_chinese_words <- unique(sensitive_chinese_words)
 sensitive_chinese_words <- setdiff(sensitive_chinese_words, "")
 
-write_csv(data.frame(sensitive_chinese_words$keyword), 'sensitive_terms_prc.csv')
+sensitive_chinese_words <- sensitive_chinese_words$keyword
+
+chinese_chars <- unlist(strsplit(gsub("[^\\p{Han}]", "", sensitive_chinese_words, perl = T), ""))
+
+dic <- read_csv('scripts/chinese_dic.csv')
+skip <- c(setdiff(chinese_chars, dic$word))
+
+for(i in skip){
+  sensitive_chinese_words <- sensitive_chinese_words[!grepl(i, sensitive_chinese_words)] 
+}
+
+write_csv(data.frame(sensitive_chinese_words), 'scripts/sensitive_terms_prc.csv')

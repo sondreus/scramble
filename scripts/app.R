@@ -39,14 +39,18 @@ if (interactive()) {
             }"
       )
     ),
-   fluidRow(column(width = 12, 
-      "Avoid",
-      checkboxInput("github_checkbox", label = HTML(paste0('<a href="https://github.com/username/repo"><i class="fa fa-github"></i>++</a>')), value = T),
-      textAreaInput("sensitive_words", "and also:", "习近平"),
-      "Input",
-      textAreaInput("text", "", "My name is frog and I am the best bread"),
-      "Output",
-    textOutput("value"))),
+   fluidRow(column(width = 12,
+                   "",
+      textAreaInput("text", icon('pen'), "今年是中国立宪百年，《世界人权宣言》公布60周年，“民主墙”诞生30周年，中国政府签署《公民权利和政治权利国际公约》10周年。在经历了长期的人权灾难和艰难曲折的抗争历程之后，觉醒的中国公民日渐清楚地认识到，自由、平等、人权是人类共同的普世价值；民主、共和、宪政是现代政治的基本制度架构。抽离了这些普世价值和基本政制架构的“现代化”，是剥夺人的权利、腐蚀人性、摧毁人的尊严的灾难过程。21世纪的中国将走向何方，是继续这种威权统治下的“现代化”，还是认同普世价值、融入主流文明、建立民主政体？这是一个不容回避的抉择。", width = '100%', heigh = "150px"),
+      icon('envelope'),
+    textOutput("value")),
+    fluidRow(
+      column(width = 12,
+             div(style = "border-bottom: 1px solid gray; margin-top: 20px; margin-bottom: 20px;")
+      )
+    ),
+   textInputIcon("sensitive_words", "", icon = icon("ban"), value = "新疆再教育營, 中国治贪史"),
+   checkboxInput("github_checkbox", label = HTML(paste0('<a href="https://github.com/jasonqng/chinese-keywords/"><i class="fa fa-github"></i> (+9054)</a>')), value = T)),
    fluidRow(
      column(width = 12,
             div(style = "border-bottom: 1px solid gray; margin-top: 20px; margin-bottom: 20px;")
@@ -110,7 +114,7 @@ if (interactive()) {
         })
         "), tags$a(href = "https://github.com/sondreus/scramble",
                    icon("github"),
-                   " "))
+                   "view code"))
     ))
   )
   

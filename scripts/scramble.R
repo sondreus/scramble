@@ -14,6 +14,19 @@ scramble <- function(text, dic,
   # Remove words without known sound or sounds without known words
   dic <- na.omit(dic)
   
+  # Ensure banned words cannot be used as replacements
+  dic$can_replace <- ifelse(!dic$word %in% sensitive, T, F)
+  
+  # Subset sensitive words to those actually in text:
+  for(i in 1:length(sensitive)){
+  sensitive[i] <- ifelse(any(grepl(sensitive[i], text)), sensitive[i], NA)
+  }
+  sensitive <- na.omit(sensitive)
+  sensitive <- setdiff(sensitive, "")
+  if(length(sensitive) == 0){
+    return(text)
+  }
+  
   # Split Chinese character sequences into component characters:
   chinese_chars <- unlist(strsplit(gsub("[^\\p{Han}]", "", sensitive, perl = T), ""))
   
@@ -24,11 +37,7 @@ scramble <- function(text, dic,
   if(sum(!sensitive %in% dic$word) != 0){
     stop('Stopping: "', paste0(sensitive[!sensitive %in% dic$word], collapse ='", "'), '" not in dictionary.')
   }
-
-  # Ensure banned words cannot be used as replacements
-  dic$can_replace <- ifelse(!dic$word %in% sensitive, T, F)
   
-  # Generate replacement words
   for(i in 1:length(sensitive)){
     replacements[[i]] <- setdiff(dic$word[dic$sound == dic$sound[dic$word == sensitive[i]] & dic$can_replace], sensitive[i])
     if(length(replacements[[i]]) < min_replacements){
