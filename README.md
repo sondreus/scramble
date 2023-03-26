@@ -18,3 +18,6 @@ The algorithm then:
 * Replaces the terms with the text with these replacements, sampling randomly from them
 * Returns the scrambled text
 
+Possibilities:
+* De-scrambling text based on reversing these steps. Note: unless the above steps are made deterministic, that seems rather hard to do. But cryptographers should feel free to chip in
+* Translating code to other languages
