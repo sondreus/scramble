@@ -2,14 +2,10 @@ library(shiny)
 library(shinythemes)
 library(shinyWidgets)
 
-# Only run examples in interactive R sessions
-if (interactive()) {
-
   Sys.setlocale(category = "LC_ALL", locale = "chs") 
   options(encoding = "UTF-8")
   
   ui <- fluidPage(
-    options(encoding = "UTF-8"),
     theme = shinytheme("darkly"),
    tags$head(
      tags$style(
@@ -142,5 +138,6 @@ if (interactive()) {
                                          dic = dictionary,
                                          sensitive = add_known(input$sensitive_words))})
   }
+  
   shinyApp(ui, server)
-}
+
