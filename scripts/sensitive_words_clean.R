@@ -3,7 +3,7 @@
 library(readr)
 terms <- read_csv("https://raw.githubusercontent.com/jasonqng/chinese-keywords/master/csv/all.csv")
 
-sensitive_chinese_words <- terms[, 1]
+sensitive_chinese_words <- terms[terms$list_blockedweibo == 1, 1]
 sensitive_chinese_words$chinese_char <- NA
 for(i in 1:nrow(sensitive_chinese_words)){
 sensitive_chinese_words$chinese_char[i] <- gsub("[^\\p{Han}]", "", sensitive_chinese_words$keyword[i], perl = T)

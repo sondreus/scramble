@@ -50,7 +50,7 @@ if (interactive()) {
       )
     ),
    textInputIcon("sensitive_words", "", icon = icon("ban"), value = "新疆再教育營, 中国治贪史"),
-   checkboxInput("github_checkbox", label = HTML(paste0('<a href="https://github.com/jasonqng/chinese-keywords/"><i class="fa fa-github"></i> (+9054)</a>')), value = T)),
+   checkboxInput("github_checkbox", label = HTML(paste0('+<a href="https://github.com/jasonqng/chinese-keywords/"><i class="fa fa-github"></i>(684 blocked on weibo)</a>')), value = T)),
    fluidRow(
      column(width = 12,
             div(style = "border-bottom: 1px solid gray; margin-top: 20px; margin-bottom: 20px;")
@@ -114,7 +114,7 @@ if (interactive()) {
         })
         "), tags$a(href = "https://github.com/sondreus/scramble",
                    icon("github"),
-                   "view code"))
+                   "{open source code}"))
     ))
   )
   

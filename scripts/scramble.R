@@ -8,15 +8,6 @@ scramble <- function(text, dic,
     return(text)
   }
 
-  # Build possible replacements (can potentially build in probability vector here if needed)
-  replacements <- list()
-  
-  # Remove words without known sound or sounds without known words
-  dic <- na.omit(dic)
-  
-  # Ensure banned words cannot be used as replacements
-  dic$can_replace <- ifelse(!dic$word %in% sensitive, T, F)
-  
   # Subset sensitive words to those actually in text:
   for(i in 1:length(sensitive)){
   sensitive[i] <- ifelse(any(grepl(sensitive[i], text)), sensitive[i], NA)
@@ -26,6 +17,18 @@ scramble <- function(text, dic,
   if(length(sensitive) == 0){
     return(text)
   }
+  
+  # Save vector of original terms
+  sensitive_terms <- sensitive
+  
+  # Build possible replacements (can potentially build in probability vector here if needed)
+  replacements <- list()
+  
+  # Remove words without known sound or sounds without known words
+  dic <- na.omit(dic)
+  
+  # Ensure banned words cannot be used as replacements
+  dic$can_replace <- ifelse(!dic$word %in% sensitive, T, F)
   
   # Split Chinese character sequences into component characters:
   chinese_chars <- unlist(strsplit(gsub("[^\\p{Han}]", "", sensitive, perl = T), ""))
@@ -55,6 +58,9 @@ scramble <- function(text, dic,
       }
     }
   }
+  
+  # Generate sub-dictionary of sensitive terms and their alternatives
+  sensitive_terms
   
   ind <- 0
   for(i in sensitive){
