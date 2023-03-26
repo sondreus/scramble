@@ -1,6 +1,10 @@
 # Scramble
 
-Scramble takes a list of sensitive terms and replaces them with a combination of words or characters that sound the same. 
+Scramble takes a list of sensitive terms and replaces them with a combination of words or characters that sound the same. The live app currently only supports Mandarin Chinese.
+
+You can try it out here: https://amaze.shinyapps.io/scramble/
+
+All suggestions welcome. Of particular help would be a larger Chinese dictionary, as well as an updated list of sensitive terms.
 
 The algorithm takes as inputs:
 * A dictionary of words and their sound
@@ -13,3 +17,4 @@ The algorithm then:
 * Generates **n** possible replacements for these terms
 * Replaces the terms with the text with these replacements, sampling randomly from them
 * Returns the scrambled text
+
