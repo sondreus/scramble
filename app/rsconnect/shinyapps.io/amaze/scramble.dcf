@@ -5,9 +5,9 @@ account: amaze
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 8676916
-bundleId: 7009903
+bundleId: 7009909
 url: https://amaze.shinyapps.io/scramble/
-when: 1679843540.2575
-lastSyncTime: 1679843540.2575
+when: 1679843676.75977
+lastSyncTime: 1679843676.75977
 asMultiple: FALSE
 asStatic: FALSE
