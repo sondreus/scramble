@@ -9,4 +9,4 @@ for(i in 1:nrow(dic)){
   dic$sound[i] <- strsplit(dic$sound[i], '/')[[1]][1]
 }
 
-write_csv(dic, 'scripts/chinese_dic.csv')
+write_csv(dic, 'app/chinese_dic.csv')

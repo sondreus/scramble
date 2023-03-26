@@ -1,0 +1,13 @@
+name: scramble
+title: scramble
+username:
+account: amaze
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 8676916
+bundleId: 7009879
+url: https://amaze.shinyapps.io/scramble/
+when: 1679842852.1447
+lastSyncTime: 1679842852.1447
+asMultiple: FALSE
+asStatic: FALSE

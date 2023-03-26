@@ -52,24 +52,34 @@ scramble <- function(text, dic,
       extra <- c(replacements[[i]], na.omit(setdiff(dic$word[dic$sound2 == dic$sound2[dic$word == gsub('[0-9]+', '', sensitive[i])] & dic$can_replace], sensitive[i])))
 
       
-      replacements[[i]] <- c(extra)[1:min(c(length(extra), 5))]
-      if(length(replacements[[i]]) < 5){
+      replacements[[i]] <- c(extra)[1:min(c(length(extra), min_replacements))]
+      if(length(replacements[[i]]) < min_replacements){
         stop(paste0('Stopping: "', sensitive[i], '" has less than ', min_replacements, ' eligible homonyms.'))
       }
     }
   }
   
   # Generate sub-dictionary of sensitive terms and their alternatives
-  sensitive_terms
-  
+  term_replacements <- data.frame()
+  for(i in 1:length(sensitive_terms)){
+    term_replacements <- rbind(term_replacements, rep(sensitive_terms[i], min_replacements))
+  }
+  for(j in 1:min_replacements){
+    for(i in 1:length(sensitive)){
+      term_replacements[,j] <- gsub(sensitive[i],
+                                    sample(replacements[[i]],
+                                           1), term_replacements[,j])
+    }
+  }
+
   ind <- 0
-  for(i in sensitive){
+  for(i in 1:length(sensitive_terms)){
     ind <- ind + 1
     old_text <- ""
     while(old_text != text){
       old_text <- text
-      text <- sub(i, 
-                  sample(replacements[[ind]], 1),
+      text <- sub(sensitive_terms[i], 
+                  sample(term_replacements[i, ], 1),
                   text, ignore.case = T)
     }
   }
