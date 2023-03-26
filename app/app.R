@@ -6,16 +6,11 @@ library(shinyWidgets)
 if (interactive()) {
 
   Sys.setlocale(category = "LC_ALL", locale = "chs") 
+  options(encoding = "UTF-8")
   
-  # sensitive_words <- c('习', '近', '平', '乔', '拜', '登')
-
   ui <- fluidPage(
+    options(encoding = "UTF-8"),
     theme = shinytheme("darkly"),
-   #  tags$head(tags$style(HTML('
-   # textArea {
-   #   background-color: transparent !important;
-   #   border: none;
-   # }'))),
    tags$head(
      tags$style(
        "body {
